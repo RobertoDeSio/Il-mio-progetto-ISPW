@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<VBox prefHeight="700.0" prefWidth="1000.0"
+      styleClass="main-container"
+      stylesheets="@../style/style.css"
+      xmlns="http://javafx.com/javafx/21"
+      xmlns:fx="http://javafx.com/fxml/1">
+    <children>
+
+        <!-- NAVBAR CLIENTE -->
+        <HBox alignment="CENTER_LEFT" prefHeight="70.0" spacing="20.0" styleClass="navbar">
+            <padding><Insets left="50.0" right="50.0"/></padding>
+            <children>
+                <Label styleClass="logo-text" text="Weekender"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Button fx:id="btnNavHome"         styleClass="nav-link" text="Home"                onAction="#handleHome"/>
+                <Button fx:id="btnNavEsplora"      styleClass="nav-link" text="Esplora Attività"    onAction="#handleEsploraAttivita"/>
+                <Button fx:id="btnNavPrenotazioni" styleClass="nav-link" text="Le Mie Prenotazioni" onAction="#handlePrenotazioni"/>
+                <Region prefWidth="10.0"/>
+                <HBox alignment="CENTER" spacing="8">
+                    <children>
+                        <Label text="👤" style="-fx-font-size: 14px;"/>
+                        <Label text="CLIENT"
+                               style="-fx-background-color: #DBEAFE; -fx-text-fill: #2563EB;
+                                      -fx-font-size: 10px; -fx-font-weight: BOLD;
+                                      -fx-background-radius: 4; -fx-padding: 2 6 2 6;"/>
+                    </children>
+                </HBox>
+                <Button styleClass="btn-outline" text="→" onAction="#handleLogout"/>
+            </children>
+        </HBox>
+
+        <!-- BOTTONE INDIETRO -->
+        <HBox style="-fx-padding: 16 50 0 50;">
+            <children>
+                <Button text="← Indietro" onAction="#handleIndietro"
+                        style="-fx-background-color: transparent; -fx-text-fill: #64748B;
+                               -fx-font-size: 13px; -fx-cursor: hand; -fx-padding: 0;"/>
+            </children>
+        </HBox>
+
+        <!-- CONTENUTO -->
+        <VBox alignment="CENTER" VBox.vgrow="ALWAYS">
+            <children>
+                <VBox maxWidth="500.0" spacing="20.0" styleClass="card-white"
+                      style="-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.10), 16, 0, 0, 4);">
+                    <padding><Insets top="32" right="32" bottom="32" left="32"/></padding>
+                    <children>
+
+                        <Label text="Completa la Prenotazione"
+                               style="-fx-font-size: 20px; -fx-font-weight: BOLD; -fx-text-fill: #1E293B;"/>
+
+                        <!-- Nome evento (informativo) -->
+                        <Label fx:id="labelNomeEvento"
+                               style="-fx-font-size: 14px; -fx-text-fill: #64748B;"/>
+
+                        <!-- Numero partecipanti -->
+                        <VBox spacing="6">
+                            <children>
+                                <Label text="Numero Partecipanti" styleClass="form-label"/>
+                                <TextField fx:id="fieldPartecipanti"
+                                           promptText="👥 1"
+                                           styleClass="form-input"/>
+                                <Label fx:id="labelMaxPosti"
+                                       styleClass="card-desc-dark"/>
+                            </children>
+                        </VBox>
+
+                        <!-- Numero di telefono -->
+                        <VBox spacing="6">
+                            <children>
+                                <Label text="Numero di Telefono" styleClass="form-label"/>
+                                <TextField fx:id="fieldNumeroDiTelefono"
+                                           promptText="Es. 3331234567"
+                                           styleClass="form-input"/>
+                            </children>
+                        </VBox>
+
+                        <!-- Numero carta (simulazione pagamento) -->
+                        <VBox spacing="6">
+                            <children>
+                                <Label text="Numero Carta" styleClass="form-label"/>
+                                <TextField fx:id="fieldNumeroCarta"
+                                           promptText="Es. 1234 5678 9012 3456  (scrivi FAIL per simulare errore)"
+                                           styleClass="form-input"/>
+                            </children>
+                        </VBox>
+
+                        <!-- Note -->
+                        <VBox spacing="6">
+                            <children>
+                                <Label text="Note per l'organizzatore" styleClass="form-label"/>
+                                <TextArea fx:id="fieldNote"
+                                          promptText="Allergie, richieste speciali..."
+                                          prefRowCount="3"
+                                          styleClass="form-input"
+                                          wrapText="true"/>
+                            </children>
+                        </VBox>
+
+                        <!-- Riepilogo costo -->
+                        <VBox spacing="8" style="-fx-background-color: #F8FAFC; -fx-background-radius: 8; -fx-padding: 16;">
+                            <children>
+                                <HBox>
+                                    <children>
+                                        <Label text="Prezzo a persona" styleClass="card-desc-dark" HBox.hgrow="ALWAYS"/>
+                                        <Label fx:id="labelPrezzoPersona" styleClass="card-desc-dark"/>
+                                    </children>
+                                </HBox>
+                                <HBox>
+                                    <children>
+                                        <Label text="Totale"
+                                               style="-fx-font-weight: BOLD; -fx-text-fill: #1E293B;"
+                                               HBox.hgrow="ALWAYS"/>
+                                        <Label fx:id="labelTotale"
+                                               style="-fx-font-weight: BOLD; -fx-text-fill: #1E293B;"/>
+                                    </children>
+                                </HBox>
+                            </children>
+                        </VBox>
+
+                        <!-- Messaggio errore -->
+                        <Label fx:id="labelErrore"
+                               wrapText="true"
+                               style="-fx-text-fill: #DC2626; -fx-font-size: 12px;"/>
+
+                        <!-- Messaggio successo -->
+                        <Label fx:id="labelSuccesso"
+                               wrapText="true"
+                               style="-fx-text-fill: #16A34A; -fx-font-size: 12px;"/>
+
+                        <Button text="Conferma e Invia Richiesta"
+                                onAction="#handleConferma"
+                                styleClass="btn-blue"
+                                maxWidth="Infinity"/>
+
+                    </children>
+                </VBox>
+            </children>
+        </VBox>
+
+    </children>
+</VBox>

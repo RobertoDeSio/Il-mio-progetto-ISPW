@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<!-- Card singolo evento — caricata N volte da EsploraController -->
+<VBox prefWidth="300.0"
+      styleClass="card-white"
+      xmlns="http://javafx.com/javafx/21"
+      xmlns:fx="http://javafx.com/fxml/1">
+    <children>
+
+        <!-- Placeholder immagine -->
+        <StackPane prefHeight="160.0">
+            <children>
+                <Region fx:id="imgPlaceholder"
+                        prefWidth="300.0" prefHeight="160.0"
+                        style="-fx-background-color: #CBD5E1; -fx-background-radius: 12 12 0 0;"/>
+                <!-- Badge prezzo in alto a destra -->
+                <Label fx:id="labelPrezzo"
+                       style="-fx-background-color: white; -fx-text-fill: #1E293B;
+                              -fx-font-weight: BOLD; -fx-font-size: 13px;
+                              -fx-background-radius: 20; -fx-padding: 4 10 4 10;"
+                       StackPane.alignment="TOP_RIGHT">
+                    <StackPane.margin><Insets top="10.0" right="10.0"/></StackPane.margin>
+                </Label>
+            </children>
+        </StackPane>
+
+        <!-- Contenuto testo -->
+        <VBox spacing="8.0" style="-fx-padding: 16;">
+            <children>
+                <!-- Badge categoria -->
+                <Label fx:id="labelCategoria"
+                       style="-fx-text-fill: #2563EB; -fx-font-size: 11px; -fx-font-weight: BOLD;
+                              -fx-background-color: #EFF6FF; -fx-background-radius: 4;
+                              -fx-padding: 2 8 2 8;"/>
+
+                <Label fx:id="labelNome"
+                       styleClass="card-title-dark"
+                       wrapText="true"/>
+
+                <Label fx:id="labelData"  styleClass="card-desc-dark"/>
+                <Label fx:id="labelLuogo" styleClass="card-desc-dark"/>
+                <Label fx:id="labelPosti" styleClass="card-desc-dark"/>
+
+                <Button fx:id="btnDettagli"
+                        text="Vedi Dettagli"
+                        onAction="#handleVediDettagli"
+                        styleClass="btn-blue"
+                        maxWidth="Infinity"/>
+            </children>
+        </VBox>
+
+    </children>
+</VBox>

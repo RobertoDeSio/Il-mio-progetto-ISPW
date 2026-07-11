@@ -1,0 +1,16 @@
+[
+  {
+    "tipo": "CLIENTE",
+    "nome": "Mario Rossi",
+    "email": "cliente@test.it",
+    "password": "cliente123"
+  },
+  {
+    "tipo": "ORGANIZZATORE",
+    "nome": "Laura Bianchi",
+    "email": "org@test.it",
+    "password": "org123",
+    "nomeAzienda": "Weekender Srl",
+    "descrizione": "Organizzatore di eventi outdoor"
+  }
+]

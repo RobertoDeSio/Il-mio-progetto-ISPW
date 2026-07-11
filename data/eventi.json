@@ -1,0 +1,35 @@
+[
+  {
+    "id": "1",
+    "nome": "Giro in Moto sulle Dolomiti",
+    "descrizione": "Un tour mozzafiato tra i passi più belli delle Dolomiti.",
+    "data": "15 giugno 2026",
+    "luogo": "Bolzano, IT",
+    "postiTotali": 10,
+    "postiOccupati": 4,
+    "prezzo": 45.0,
+    "categoria": "MOTO"
+  },
+  {
+    "id": "2",
+    "nome": "Giornata in Barca a Vela",
+    "descrizione": "Una giornata indimenticabile in barca a vela.",
+    "data": "20 luglio 2026",
+    "luogo": "Portofino, IT",
+    "postiTotali": 6,
+    "postiOccupati": 0,
+    "prezzo": 120.0,
+    "categoria": "BOAT"
+  },
+  {
+    "id": "3",
+    "nome": "Trekking Monte Bianco",
+    "descrizione": "Escursione guidata sul Monte Bianco.",
+    "data": "10 agosto 2026",
+    "luogo": "Courmayeur, IT",
+    "postiTotali": 15,
+    "postiOccupati": 8,
+    "prezzo": 30.0,
+    "categoria": "TREKKING"
+  }
+]

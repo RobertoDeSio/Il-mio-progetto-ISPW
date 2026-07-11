@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<VBox prefHeight="700.0" prefWidth="1000.0" styleClass="main-container" stylesheets="@../style/style.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
+    <!-- Controller iniettato via codice, nessun fx:controller -->
+    <children>
+        <HBox alignment="CENTER_LEFT" prefHeight="70.0" spacing="30.0" styleClass="navbar">
+            <padding><Insets left="50.0" right="50.0" /></padding>
+            <children>
+                <Label styleClass="logo-text" text="Weekender" />
+                <Region HBox.hgrow="ALWAYS" />
+                <Button fx:id="btnNavHome" styleClass="nav-link" text="Home" onAction="#handleHome"/>
+                <Button styleClass="nav-button-login" text="Accedi →" onAction="#handleAccedi"/>
+            </children>
+        </HBox>
+
+        <VBox alignment="CENTER" spacing="10.0" VBox.vgrow="ALWAYS">
+            <children>
+                <Label styleClass="hero-title-black" text="Il tuo tempo libero," />
+                <Label styleClass="hero-title-blue" text="organizzato alla perfezione." />
+                <Label styleClass="hero-subtitle" text="Unisciti a noi per esperienze indimenticabili o crea il tuo evento e condividi la tua passione." wrapText="true" alignment="CENTER" maxWidth="600"/>
+
+                <HBox alignment="CENTER" spacing="40.0">
+                    <padding><Insets top="40.0" /></padding>
+                    <children>
+                        <VBox alignment="CENTER" styleClass="card-white" spacing="20.0">
+                            <children>
+                                <Label styleClass="card-title-dark" text="Cerchi un'avventura?" />
+                                <Label styleClass="card-desc-dark" text="Sfoglia il catalogo di eventi esclusivi: moto, barca, trekking e molto altro." wrapText="true" alignment="CENTER" />
+                                <Button styleClass="btn-blue" text="Prenota Evento →" onAction="#handlePrenotaEvento"/>
+                            </children>
+                        </VBox>
+
+                        <VBox alignment="CENTER" styleClass="card-dark" spacing="20.0">
+                            <children>
+                                <Label styleClass="card-title-light" text="Sei un organizzatore?" />
+                                <Label styleClass="card-desc-light" text="Proponi la tua attività, gestisci le prenotazioni e fai crescere la tua community." wrapText="true" alignment="CENTER" />
+                                <Button styleClass="btn-white" text="Crea Evento →" onAction="#handleCreaEvento"/>
+                            </children>
+                        </VBox>
+                    </children>
+                </HBox>
+            </children>
+        </VBox>
+    </children>
+</VBox>

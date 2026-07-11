@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<VBox prefHeight="700.0" prefWidth="1000.0"
+      styleClass="main-container"
+      stylesheets="@../style/style.css"
+      xmlns="http://javafx.com/javafx/21"
+      xmlns:fx="http://javafx.com/fxml/1">
+    <children>
+
+        <!-- NAVBAR CLIENTE -->
+        <HBox fx:id="navbarCliente" alignment="CENTER_LEFT" prefHeight="70.0" spacing="20.0" styleClass="navbar">
+            <padding><Insets left="50.0" right="50.0"/></padding>
+            <children>
+                <Label styleClass="logo-text" text="Weekender"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Button fx:id="btnNavHome"         styleClass="nav-link" text="Home"                onAction="#handleHome"/>
+                <Button fx:id="btnNavEsplora"      styleClass="nav-link" text="Esplora Attività"    onAction="#handleEsploraAttivita"/>
+                <Button fx:id="btnNavPrenotazioni" styleClass="nav-link" text="Le Mie Prenotazioni" onAction="#handlePrenotazioni"/>
+                <Region prefWidth="10.0"/>
+                <HBox alignment="CENTER" spacing="8">
+                    <children>
+                        <Label text="👤" style="-fx-font-size: 14px;"/>
+                        <Label text="CLIENT"
+                               style="-fx-background-color: #DBEAFE; -fx-text-fill: #2563EB;
+                                      -fx-font-size: 10px; -fx-font-weight: BOLD;
+                                      -fx-background-radius: 4; -fx-padding: 2 6 2 6;"/>
+                    </children>
+                </HBox>
+                <Button styleClass="btn-outline" text="→" onAction="#handleLogout"/>
+            </children>
+        </HBox>
+
+        <!-- NAVBAR ORGANIZZATORE -->
+        <HBox fx:id="navbarOrganizzatore" alignment="CENTER_LEFT" prefHeight="70.0" spacing="20.0" styleClass="navbar" visible="false" managed="false">
+            <padding><Insets left="50.0" right="50.0"/></padding>
+            <children>
+                <Label styleClass="logo-text" text="Weekender"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Button fx:id="btnNavHomeOrg"     styleClass="nav-link" text="Home"               onAction="#handleHome"/>
+                <Button fx:id="btnNavEsploraOrg"  styleClass="nav-link" text="Esplora Attività"   onAction="#handleEsploraAttivita"/>
+                <Button                            styleClass="nav-link" text="Crea Evento"        onAction="#handleCreaEvento"/>
+                <Button fx:id="btnNavGestioneOrg" styleClass="nav-link" text="Gestione Richieste" onAction="#handleGestioneRichieste"/>
+                <Region prefWidth="10.0"/>
+                <HBox alignment="CENTER" spacing="8">
+                    <children>
+                        <Label text="👤" style="-fx-font-size: 14px;"/>
+                        <Label text="ORGANIZER"
+                               style="-fx-background-color: #DBEAFE; -fx-text-fill: #2563EB;
+                                      -fx-font-size: 10px; -fx-font-weight: BOLD;
+                                      -fx-background-radius: 4; -fx-padding: 2 6 2 6;"/>
+                    </children>
+                </HBox>
+                <Button styleClass="btn-outline" text="→" onAction="#handleLogout"/>
+            </children>
+        </HBox>
+
+        <!-- BOTTONE INDIETRO -->
+        <HBox style="-fx-padding: 16 50 0 50;">
+            <children>
+                <Button text="← Indietro" onAction="#handleIndietro"
+                        style="-fx-background-color: transparent; -fx-text-fill: #64748B; -fx-font-size: 13px; -fx-cursor: hand; -fx-padding: 0;"/>
+            </children>
+        </HBox>
+
+        <!-- CONTENUTO -->
+        <HBox spacing="30" style="-fx-padding: 24 50 40 50;" VBox.vgrow="ALWAYS">
+            <children>
+
+                <!-- Colonna sinistra: info evento -->
+                <VBox spacing="20" HBox.hgrow="ALWAYS">
+                    <children>
+
+                        <!-- Placeholder immagine -->
+                        <VBox prefHeight="200" style="-fx-background-color: #CBD5E1; -fx-background-radius: 12;"/>
+
+                        <!-- Badge categoria + titolo -->
+                        <VBox spacing="8">
+                            <children>
+                                <Label fx:id="labelCategoria"
+                                       style="-fx-text-fill: #2563EB; -fx-font-size: 11px; -fx-font-weight: BOLD;
+                                              -fx-background-color: #EFF6FF; -fx-background-radius: 4; -fx-padding: 2 8 2 8;"/>
+                                <Label fx:id="labelNome"
+                                       styleClass="hero-title-black" wrapText="true"/>
+                            </children>
+                        </VBox>
+
+                        <!-- Descrizione -->
+                        <VBox spacing="8">
+                            <children>
+                                <Label text="Descrizione"
+                                       style="-fx-font-size: 16px; -fx-font-weight: BOLD; -fx-text-fill: #1E293B;"/>
+                                <Label fx:id="labelDescrizione"
+                                       styleClass="hero-subtitle" wrapText="true"/>
+                            </children>
+                        </VBox>
+
+                        <!-- Data e luogo -->
+                        <HBox spacing="16">
+                            <children>
+                                <VBox styleClass="card-white" spacing="4" HBox.hgrow="ALWAYS"
+                                      style="-fx-padding: 12; -fx-background-radius: 8;">
+                                    <children>
+                                        <Label text="📅 Data" styleClass="card-desc-dark"/>
+                                        <Label fx:id="labelData" styleClass="card-title-dark"/>
+                                    </children>
+                                </VBox>
+                                <VBox styleClass="card-white" spacing="4" HBox.hgrow="ALWAYS"
+                                      style="-fx-padding: 12; -fx-background-radius: 8;">
+                                    <children>
+                                        <Label text="📍 Luogo" styleClass="card-desc-dark"/>
+                                        <Label fx:id="labelLuogo" styleClass="card-title-dark"/>
+                                    </children>
+                                </VBox>
+                            </children>
+                        </HBox>
+                    </children>
+                </VBox>
+
+                <!-- Colonna destra: prenotazione -->
+                <VBox spacing="16" prefWidth="280"
+                      styleClass="card-white"
+                      style="-fx-padding: 24; -fx-background-radius: 12;
+                             -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 10, 0, 0, 2);">
+                    <children>
+                        <!-- Prezzo -->
+                        <HBox alignment="BASELINE_LEFT" spacing="8">
+                            <children>
+                                <Label fx:id="labelPrezzo"
+                                       style="-fx-font-size: 28px; -fx-font-weight: BOLD; -fx-text-fill: #1E293B;"/>
+                                <Label text="per persona"
+                                       style="-fx-font-size: 13px; -fx-text-fill: #64748B;"/>
+                            </children>
+                        </HBox>
+
+                        <!-- Posti -->
+                        <VBox spacing="6">
+                            <children>
+                                <HBox alignment="CENTER_LEFT" spacing="8">
+                                    <children>
+                                        <Label text="👥 Partecipanti" styleClass="card-desc-dark" HBox.hgrow="ALWAYS"/>
+                                        <Label fx:id="labelPosti" styleClass="card-desc-dark"/>
+                                    </children>
+                                </HBox>
+                                <ProgressBar fx:id="progressPosti" prefWidth="Infinity" style="-fx-accent: #2563EB;"/>
+                            </children>
+                        </VBox>
+
+                        <Button fx:id="btnAzione"
+                                text="Invia Richiesta di Prenotazione"
+                                onAction="#handleAzione"
+                                styleClass="btn-blue"
+                                maxWidth="Infinity"
+                                wrapText="true"/>
+
+                        <Label text="✓ Richiesta soggetta ad approvazione"
+                               style="-fx-font-size: 11px; -fx-text-fill: #64748B;"/>
+                    </children>
+                </VBox>
+
+            </children>
+        </HBox>
+    </children>
+</VBox>
