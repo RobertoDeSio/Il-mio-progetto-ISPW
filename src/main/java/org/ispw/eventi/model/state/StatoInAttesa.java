@@ -1,12 +1,5 @@
 package org.ispw.eventi.model.state;
 
-/**
- * Stato iniziale della prenotazione.
- * Il cliente ha inviato la richiesta, l'organizzatore non ha ancora risposto.
- *
- * Transizioni permesse: approva() → StatoApprovata
- *                       rifiuta() → StatoRifiutata
- */
 public class StatoInAttesa implements StatoPrenotazione {
 
     private static final String BADGE_STILE =
@@ -17,20 +10,15 @@ public class StatoInAttesa implements StatoPrenotazione {
     @Override public boolean puoiRifiutare() { return true; }
     @Override public boolean puoiPagare()    { return false; }
 
-    @Override
-    public StatoPrenotazione approva() {
-        return new StatoApprovata();
+    @Override public StatoPrenotazione approva() { return new StatoApprovata(); }
+    @Override public StatoPrenotazione rifiuta() { return new StatoRifiutata(); }
+
+    @Override public StatoPrenotazione paga() {
+        throw new IllegalStateException("Non è possibile pagare una prenotazione in attesa di conferma.");
     }
 
-    @Override
-    public StatoPrenotazione rifiuta() {
-        return new StatoRifiutata();
-    }
-
-    @Override
-    public StatoPrenotazione paga() {
-        throw new IllegalStateException(
-                "Non è possibile pagare una prenotazione ancora in attesa di conferma.");
+    @Override public StatoPrenotazione scadi() {
+        throw new IllegalStateException("Non è possibile scadere una prenotazione non ancora approvata.");
     }
 
     @Override public String getEtichetta()  { return "⏳ In attesa di conferma"; }

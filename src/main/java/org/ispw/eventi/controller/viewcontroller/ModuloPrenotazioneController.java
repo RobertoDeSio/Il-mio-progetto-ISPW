@@ -113,7 +113,6 @@ public class ModuloPrenotazioneController implements Initializable {
     }
 
     private void mostraErrore(String msg)   { labelErrore.setText(msg);   labelErrore.setVisible(true); }
-    private void mostraSuccesso(String msg) { labelSuccesso.setText(msg); labelSuccesso.setVisible(true); }
 
     private void setNavAttivo(Button b) {
         for (Button btn : new Button[]{btnNavHome, btnNavEsplora, btnNavPrenotazioni})

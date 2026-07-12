@@ -52,15 +52,21 @@ public class FileSystemDAOFactory extends DAOFactory {
         if (Files.exists(path)) return; // già inizializzato
 
         List<Evento> eventi = List.of(
-                new Evento("1", "Giro in Moto sulle Dolomiti",
-                        "Un tour mozzafiato tra i passi più belli delle Dolomiti.",
-                        "15 giugno 2026", "Bolzano, IT", 10, 4, 45.0, Categoria.MOTO),
-                new Evento("2", "Giornata in Barca a Vela",
-                        "Una giornata indimenticabile in barca a vela.",
-                        "20 luglio 2026", "Portofino, IT", 6, 0, 120.0, Categoria.BOAT),
-                new Evento("3", "Trekking Monte Bianco",
-                        "Escursione guidata sul Monte Bianco.",
-                        "10 agosto 2026", "Courmayeur, IT", 15, 8, 30.0, Categoria.TREKKING)
+                Evento.builder().id("1").nome("Giro in Moto sulle Dolomiti")
+                        .descrizione("Un tour mozzafiato tra i passi più belli delle Dolomiti.")
+                        .data("15 giugno 2026").luogo("Bolzano, IT")
+                        .postiTotali(10).postiOccupati(4).prezzo(45.0).categoria(Categoria.MOTO)
+                        .build(),
+                Evento.builder().id("2").nome("Giornata in Barca a Vela")
+                        .descrizione("Una giornata indimenticabile in barca a vela.")
+                        .data("20 luglio 2026").luogo("Portofino, IT")
+                        .postiTotali(6).postiOccupati(0).prezzo(120.0).categoria(Categoria.BOAT)
+                        .build(),
+                Evento.builder().id("3").nome("Trekking Monte Bianco")
+                        .descrizione("Escursione guidata sul Monte Bianco.")
+                        .data("10 agosto 2026").luogo("Courmayeur, IT")
+                        .postiTotali(15).postiOccupati(8).prezzo(30.0).categoria(Categoria.TREKKING)
+                        .build()
         );
         scriviFile(path, GSON.toJson(eventi));
     }

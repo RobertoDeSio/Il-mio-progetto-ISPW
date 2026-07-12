@@ -32,7 +32,8 @@ CREATE TABLE IF NOT EXISTS prenotazioni (
                                             numero_partecipanti   INTEGER NOT NULL DEFAULT 1,
                                             note                  TEXT,
                                             stato                 TEXT NOT NULL DEFAULT 'IN_ATTESA'
-                                                CHECK (stato IN ('IN_ATTESA', 'APPROVATA', 'RIFIUTATA', 'CONFERMATA'))
+                                                CHECK (stato IN ('IN_ATTESA','APPROVATA','RIFIUTATA','CONFERMATA','SCADUTA')),
+                                            data_approvazione     TEXT            -- ISO LocalDateTime, null se non ancora approvata
 );
 
 -- Dati iniziali: i 3 eventi presettati

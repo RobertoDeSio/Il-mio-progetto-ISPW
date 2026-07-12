@@ -57,16 +57,16 @@ public class EventoDAODBMS implements EventoDAO {
     }
 
     private Evento mapRow(ResultSet rs) throws SQLException {
-        return new Evento(
-                rs.getString("id"),
-                rs.getString("nome"),
-                rs.getString("descrizione"),
-                rs.getString("data"),
-                rs.getString("luogo"),
-                rs.getInt("posti_totali"),
-                rs.getInt("posti_occupati"),
-                rs.getDouble("prezzo"),
-                Categoria.valueOf(rs.getString("categoria"))
-        );
+        return Evento.builder()
+                .id(rs.getString("id"))
+                .nome(rs.getString("nome"))
+                .descrizione(rs.getString("descrizione"))
+                .data(rs.getString("data"))
+                .luogo(rs.getString("luogo"))
+                .postiTotali(rs.getInt("posti_totali"))
+                .postiOccupati(rs.getInt("posti_occupati"))
+                .prezzo(rs.getDouble("prezzo"))
+                .categoria(Categoria.valueOf(rs.getString("categoria")))
+                .build();
     }
 }

@@ -24,6 +24,10 @@ public class PrenotazioniController implements Initializable {
 
     private static final Logger LOGGER = Logger.getLogger(PrenotazioniController.class.getName());
 
+    // Stile comune ai bottoni azione della card prenotazione (SonarQube S1192)
+    private static final String STILE_BOTTONE_AZIONE =
+            "-fx-background-radius: 6; -fx-font-weight: BOLD; -fx-cursor: hand;";
+
     @FXML private Button btnNavHome;
     @FXML private Button btnNavEsplora;
     @FXML private Button btnNavPrenotazioni;
@@ -105,22 +109,24 @@ public class PrenotazioniController implements Initializable {
 
     private HBox creaPulsantePagamento(String prenotazioneId) {
         Button btnPaga = new Button("💳 Paga ora");
-        btnPaga.setStyle("-fx-background-color: #2563EB; -fx-text-fill: white; " +
-                "-fx-background-radius: 6; -fx-font-weight: BOLD; -fx-cursor: hand;");
+        btnPaga.setStyle("-fx-background-color: #2563EB; -fx-text-fill: white; " + STILE_BOTTONE_AZIONE);
 
         Button btnFallisci = new Button("⚠ Simula pagamento fallito");
-        btnFallisci.setStyle("-fx-background-color: #DC2626; -fx-text-fill: white; " +
-                "-fx-background-radius: 6; -fx-font-weight: BOLD; -fx-cursor: hand;");
+        btnFallisci.setStyle("-fx-background-color: #DC2626; -fx-text-fill: white; " + STILE_BOTTONE_AZIONE);
+
+        Button btnScadenza = new Button("⌛ Simula scadenza 24h");
+        btnScadenza.setStyle("-fx-background-color: #92400E; -fx-text-fill: white; " + STILE_BOTTONE_AZIONE);
 
         Label feedback = new Label();
         feedback.setWrapText(true);
         feedback.setStyle("-fx-font-size: 12px;");
 
-        btnPaga.setOnAction(e -> gestisciPagamento(prenotazioneId, "OK", feedback));
+        btnPaga.setOnAction(e     -> gestisciPagamento(prenotazioneId, "OK", feedback));
         btnFallisci.setOnAction(e -> gestisciPagamento(
                 prenotazioneId, PrenotazioneRequestBean.CARTA_TEST_FALLIMENTO, feedback));
+        btnScadenza.setOnAction(e -> gestisciScadenza(prenotazioneId, feedback));
 
-        HBox row = new HBox(8, btnPaga, btnFallisci, feedback);
+        HBox row = new HBox(8, btnPaga, btnFallisci, btnScadenza, feedback);
         row.setStyle("-fx-padding: 4 0 0 0;");
         return row;
     }
@@ -135,6 +141,18 @@ public class PrenotazioniController implements Initializable {
             feedback.setStyle("-fx-text-fill: #DC2626; -fx-font-size: 12px;");
         } catch (PrenotazioneNotFoundException ex) {
             LOGGER.log(Level.SEVERE, "Prenotazione non trovata: {0}", ex.getMessage());
+        }
+    }
+
+    private void gestisciScadenza(String prenotazioneId, Label feedback) {
+        try {
+            appController.simulaScadenza(prenotazioneId);
+            // Ricarica la lista — la card mostrerà lo stato SCADUTA senza bottoni
+            caricaPrenotazioni();
+        } catch (PrenotazioneNotFoundException ex) {
+            LOGGER.log(Level.SEVERE, "Prenotazione non trovata: {0}", ex.getMessage());
+            feedback.setText("Errore: prenotazione non trovata.");
+            feedback.setStyle("-fx-text-fill: #DC2626; -fx-font-size: 12px;");
         }
     }
 

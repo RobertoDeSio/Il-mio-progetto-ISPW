@@ -1,9 +1,5 @@
 package org.ispw.eventi.model.state;
 
-/**
- * Il cliente ha pagato e la prenotazione è completata.
- * Stato terminale — nessuna transizione permessa.
- */
 public class StatoConfermata implements StatoPrenotazione {
 
     private static final String BADGE_STILE =
@@ -14,19 +10,17 @@ public class StatoConfermata implements StatoPrenotazione {
     @Override public boolean puoiRifiutare() { return false; }
     @Override public boolean puoiPagare()    { return false; }
 
-    @Override
-    public StatoPrenotazione approva() {
+    @Override public StatoPrenotazione approva() {
         throw new IllegalStateException("La prenotazione è già confermata.");
     }
-
-    @Override
-    public StatoPrenotazione rifiuta() {
+    @Override public StatoPrenotazione rifiuta() {
         throw new IllegalStateException("Non è possibile rifiutare una prenotazione già confermata.");
     }
-
-    @Override
-    public StatoPrenotazione paga() {
+    @Override public StatoPrenotazione paga() {
         throw new IllegalStateException("Il pagamento è già stato effettuato.");
+    }
+    @Override public StatoPrenotazione scadi() {
+        throw new IllegalStateException("Non è possibile scadere una prenotazione già confermata.");
     }
 
     @Override public String getEtichetta()  { return "🎉 Confermata e pagata"; }

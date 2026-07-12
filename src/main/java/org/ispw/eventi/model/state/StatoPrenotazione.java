@@ -30,6 +30,12 @@ public interface StatoPrenotazione {
     StatoPrenotazione rifiuta();
     StatoPrenotazione paga();
 
+    /**
+     * Transizione di scadenza — permessa solo dallo stato APPROVATA.
+     * Chiamata dall'AppController quando le 24h sono trascorse senza pagamento.
+     */
+    StatoPrenotazione scadi();
+
     // -------------------------------------------------------------------------
     // Presentazione per la UI (passate al Bean, mai viste direttamente dalla UI)
     // -------------------------------------------------------------------------

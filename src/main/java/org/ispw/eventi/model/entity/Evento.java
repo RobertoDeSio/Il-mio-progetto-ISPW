@@ -14,18 +14,16 @@ public class Evento {
     private double    prezzo;
     private Categoria categoria;
 
-    public Evento(String id, String nome, String descrizione, String data,
-                  String luogo, int postiTotali, int postiOccupati,
-                  double prezzo, Categoria categoria) {
-        this.id            = id;
-        this.nome          = nome;
-        this.descrizione   = descrizione;
-        this.data          = data;
-        this.luogo         = luogo;
-        this.postiTotali   = postiTotali;
-        this.postiOccupati = postiOccupati;
-        this.prezzo        = prezzo;
-        this.categoria     = categoria;
+    private Evento(Builder b) {
+        this.id            = b.id;
+        this.nome          = b.nome;
+        this.descrizione   = b.descrizione;
+        this.data          = b.data;
+        this.luogo         = b.luogo;
+        this.postiTotali   = b.postiTotali;
+        this.postiOccupati = b.postiOccupati;
+        this.prezzo        = b.prezzo;
+        this.categoria     = b.categoria;
     }
 
     public String    getId()            { return id; }
@@ -54,5 +52,38 @@ public class Evento {
 
     public String getPrezzoLabel() {
         return "€" + (int) prezzo;
+    }
+
+    public static Builder builder() {
+        return new Builder();
+    }
+
+    /** Builder fluente per Evento. */
+    public static final class Builder {
+        private String    id;
+        private String    nome;
+        private String    descrizione;
+        private String    data;
+        private String    luogo;
+        private int       postiTotali;
+        private int       postiOccupati;
+        private double    prezzo;
+        private Categoria categoria;
+
+        private Builder() { }
+
+        public Builder id(String id)                       { this.id = id; return this; }
+        public Builder nome(String nome)                   { this.nome = nome; return this; }
+        public Builder descrizione(String descrizione)     { this.descrizione = descrizione; return this; }
+        public Builder data(String data)                   { this.data = data; return this; }
+        public Builder luogo(String luogo)                 { this.luogo = luogo; return this; }
+        public Builder postiTotali(int postiTotali)        { this.postiTotali = postiTotali; return this; }
+        public Builder postiOccupati(int postiOccupati)    { this.postiOccupati = postiOccupati; return this; }
+        public Builder prezzo(double prezzo)                { this.prezzo = prezzo; return this; }
+        public Builder categoria(Categoria categoria)       { this.categoria = categoria; return this; }
+
+        public Evento build() {
+            return new Evento(this);
+        }
     }
 }

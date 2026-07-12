@@ -13,11 +13,11 @@ import java.util.logging.Logger;
 public class PrenotazioneDAODBMS implements PrenotazioneDAO {
 
     private static final Logger LOGGER     = Logger.getLogger(PrenotazioneDAODBMS.class.getName());
-    private static final String SELECT_ALL = "SELECT id, evento_id, cliente_email, numero_partecipanti, note, stato FROM prenotazioni";
+    private static final String SELECT_ALL = "SELECT id, evento_id, cliente_email, numero_partecipanti, note, stato, data_approvazione FROM prenotazioni";
 
     @Override
     public void save(Prenotazione p) {
-        String sql = "INSERT INTO prenotazioni (id, evento_id, cliente_email, numero_partecipanti, note, stato) VALUES (?,?,?,?,?,?)";
+        String sql = "INSERT INTO prenotazioni (id, evento_id, cliente_email, numero_partecipanti, note, stato, data_approvazione) VALUES (?,?,?,?,?,?,?)";
         try (PreparedStatement stmt = DatabaseConnection.getInstance().prepareStatement(sql)) {
             stmt.setString(1, p.getId());
             stmt.setString(2, p.getEventoId());
@@ -25,6 +25,7 @@ public class PrenotazioneDAODBMS implements PrenotazioneDAO {
             stmt.setInt(4, p.getNumeroPartecipanti());
             stmt.setString(5, p.getNote());
             stmt.setString(6, p.getStato().name());
+            stmt.setString(7, p.getDataApprovazione() != null ? p.getDataApprovazione().toString() : null);
             stmt.executeUpdate();
         } catch (SQLException e) {
             LOGGER.log(Level.SEVERE, e, () -> "Errore save prenotazione: " + p.getId());
@@ -33,10 +34,11 @@ public class PrenotazioneDAODBMS implements PrenotazioneDAO {
 
     @Override
     public void update(Prenotazione p) {
-        String sql = "UPDATE prenotazioni SET stato = ? WHERE id = ?";
+        String sql = "UPDATE prenotazioni SET stato = ?, data_approvazione = ? WHERE id = ?";
         try (PreparedStatement stmt = DatabaseConnection.getInstance().prepareStatement(sql)) {
             stmt.setString(1, p.getStato().name());
-            stmt.setString(2, p.getId());
+            stmt.setString(2, p.getDataApprovazione() != null ? p.getDataApprovazione().toString() : null);
+            stmt.setString(3, p.getId());
             stmt.executeUpdate();
         } catch (SQLException e) {
             LOGGER.log(Level.SEVERE, e, () -> "Errore update prenotazione: " + p.getId());
@@ -105,6 +107,10 @@ public class PrenotazioneDAODBMS implements PrenotazioneDAO {
                 rs.getString("note")
         );
         p.setStato(Stato.valueOf(rs.getString("stato")));
+        String dataAppr = rs.getString("data_approvazione");
+        if (dataAppr != null) {
+            p.setDataApprovazione(java.time.LocalDateTime.parse(dataAppr));
+        }
         return p;
     }
 }

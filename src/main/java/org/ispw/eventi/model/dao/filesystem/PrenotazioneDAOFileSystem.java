@@ -2,7 +2,11 @@ package org.ispw.eventi.model.dao.filesystem;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.TypeAdapter;
 import com.google.gson.reflect.TypeToken;
+import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonToken;
+import com.google.gson.stream.JsonWriter;
 import org.ispw.eventi.model.dao.PrenotazioneDAO;
 import org.ispw.eventi.model.entity.Prenotazione;
 
@@ -10,6 +14,8 @@ import java.io.IOException;
 import java.lang.reflect.Type;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.*;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -19,7 +25,34 @@ public class PrenotazioneDAOFileSystem implements PrenotazioneDAO {
 
     private static final Logger LOGGER    = Logger.getLogger(PrenotazioneDAOFileSystem.class.getName());
     private static final String FILE_PATH = "data/prenotazioni.json";
-    private static final Gson   GSON      = new GsonBuilder().setPrettyPrinting().create();
+
+    // Gson non riesce ad accedere per riflessione ai campi privati di
+    // java.time.LocalDateTime sotto il module system di Java 9+
+    // (java.base non "opens" java.time). Serve un TypeAdapter dedicato.
+    private static final Gson GSON = new GsonBuilder()
+            .setPrettyPrinting()
+            .registerTypeAdapter(LocalDateTime.class, new TypeAdapter<LocalDateTime>() {
+                private final DateTimeFormatter formatter = DateTimeFormatter.ISO_LOCAL_DATE_TIME;
+
+                @Override
+                public void write(JsonWriter out, LocalDateTime value) throws IOException {
+                    if (value == null) {
+                        out.nullValue();
+                    } else {
+                        out.value(formatter.format(value));
+                    }
+                }
+
+                @Override
+                public LocalDateTime read(JsonReader in) throws IOException {
+                    if (in.peek() == JsonToken.NULL) {
+                        in.nextNull();
+                        return null;
+                    }
+                    return LocalDateTime.parse(in.nextString(), formatter);
+                }
+            })
+            .create();
 
     @Override
     public void save(Prenotazione prenotazione) {

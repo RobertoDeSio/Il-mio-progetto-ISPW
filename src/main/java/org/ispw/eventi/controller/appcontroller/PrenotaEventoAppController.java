@@ -35,12 +35,12 @@ public class PrenotaEventoAppController {
     private static final Logger LOGGER = Logger.getLogger(
             PrenotaEventoAppController.class.getName());
 
-    private final EventoDAO       eventoDAO;
+    private final EventoDAO eventoDAO;
     private final PrenotazioneDAO prenotazioneDAO;
 
     public PrenotaEventoAppController(EventoDAO eventoDAO,
                                       PrenotazioneDAO prenotazioneDAO) {
-        this.eventoDAO       = eventoDAO;
+        this.eventoDAO = eventoDAO;
         this.prenotazioneDAO = prenotazioneDAO;
     }
 
@@ -214,7 +214,9 @@ public class PrenotaEventoAppController {
     // Metodi di lettura per i controller grafici
     // =========================================================================
 
-    /** Tutte le prenotazioni di un cliente (per PrenotazioniController). */
+    /**
+     * Tutte le prenotazioni di un cliente (per PrenotazioniController).
+     */
     public List<PrenotazioneBean> getPrenotazioniCliente(String clienteEmail) {
         List<PrenotazioneBean> beans = new ArrayList<>();
         for (Prenotazione p : prenotazioneDAO.findByClienteEmail(clienteEmail)) {
@@ -226,7 +228,9 @@ public class PrenotaEventoAppController {
         return beans;
     }
 
-    /** Tutte le prenotazioni IN_ATTESA o APPROVATA (per GestioneRichiesteController). */
+    /**
+     * Tutte le prenotazioni IN_ATTESA o APPROVATA (per GestioneRichiesteController).
+     */
     public List<PrenotazioneBean> getRichiesteOrganizzatore() {
         List<PrenotazioneBean> beans = new ArrayList<>();
         for (Prenotazione p : prenotazioneDAO.findAll()) {
@@ -255,24 +259,81 @@ public class PrenotaEventoAppController {
 
     private EventoBean toEventoBean(Evento e) {
         int disponibili = e.getPostiTotali() - e.getPostiOccupati();
-        return new EventoBean(e.getId(), e.getNome(), e.getDescrizione(),
-                e.getData(), e.getLuogo(), e.getCategoria().name(),
-                disponibili, e.getPrezzo());
+        return EventoBean.builder()
+                .id(e.getId())
+                .nome(e.getNome())
+                .descrizione(e.getDescrizione())
+                .data(e.getData())
+                .luogo(e.getLuogo())
+                .categoria(e.getCategoria().name())
+                .postiDisponibili(disponibili)
+                .prezzo(e.getPrezzo())
+                .build();
     }
 
     private PrenotazioneBean toPrenotazioneBean(Prenotazione p,
                                                 String nomeEvento,
                                                 double totale) {
         StatoPrenotazione stato = p.getStatoCorrente();
-        return new PrenotazioneBean(
-                p.getId(), nomeEvento, p.getClienteEmail(),
-                p.getNumeroPartecipanti(), p.getNote(), p.getNote(),
-                p.getStato().name(), totale,
-                stato.puoiPagare(),
-                stato.puoiApprovare(),
-                stato.puoiRifiutare(),
-                stato.getEtichetta(),
-                stato.getBadgeStile()
+        String dataAppr = p.getDataApprovazione() != null
+                ? p.getDataApprovazione().toString()
+                : null;
+        return PrenotazioneBean.builder()
+                .id(p.getId())
+                .nomeEvento(nomeEvento)
+                .clienteEmail(p.getClienteEmail())
+                .numeroPartecipanti(p.getNumeroPartecipanti())
+                .note(p.getNote())
+                .stato(p.getStato().name())
+                .totale(totale)
+                .puoiPagare(stato.puoiPagare())
+                .puoiApprovare(stato.puoiApprovare())
+                .puoiRifiutare(stato.puoiRifiutare())
+                .etichettaStato(stato.getEtichetta())
+                .badgeStile(stato.getBadgeStile())
+                .dataApprovazione(dataAppr)
+                .build();
+    }
+
+
+// =========================================================================
+// Simulazione scadenza 24h
+// =========================================================================
+
+    /**
+     * Simula la scadenza delle 24h spostando la dataApprovazione indietro
+     * di 25 ore e verificando immediatamente se la prenotazione è scaduta.
+     * <p>
+     * Flusso:
+     * 1. Sposta dataApprovazione = now - 25h (simula il passare del tempo)
+     * 2. Chiama isScaduta(now) → true
+     * 3. Chiama prenotazione.scadi() → transizione State APPROVATA → SCADUTA
+     * 4. Persiste e restituisce il Bean aggiornato
+     *
+     * @throws PrenotazioneNotFoundException prenotazione non trovata
+     * @throws IllegalStateException         se la prenotazione non è APPROVATA
+     */
+    public PrenotazioneBean simulaScadenza(String prenotazioneId)
+            throws PrenotazioneNotFoundException {
+
+        Prenotazione prenotazione = trovaOLancia(prenotazioneId);
+
+        // 1. Sposta dataApprovazione 25h nel passato
+        prenotazione.setDataApprovazione(
+                java.time.LocalDateTime.now().minusHours(25)
         );
+
+        // 2. Verifica scadenza con il tempo reale — ora sarà true
+        if (prenotazione.isScaduta(java.time.LocalDateTime.now())) {
+            // 3. Transizione via State
+            prenotazione.scadi();
+            prenotazioneDAO.update(prenotazione);
+            LOGGER.info(() -> "[SCADENZA] Prenotazione " + prenotazioneId +
+                    " scaduta per mancato pagamento entro 24h.");
+        }
+
+        Evento evento = eventoDAO.findById(prenotazione.getEventoId());
+        String nomeEvento = evento != null ? evento.getNome() : prenotazione.getEventoId();
+        return toPrenotazioneBean(prenotazione, nomeEvento, 0);
     }
 }

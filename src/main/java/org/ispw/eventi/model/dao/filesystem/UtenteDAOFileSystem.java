@@ -30,6 +30,16 @@ public class UtenteDAOFileSystem implements UtenteDAO {
     private static final String FILE_PATH = "data/utenti.json";
     private static final Gson   GSON      = new GsonBuilder().setPrettyPrinting().create();
 
+    // Chiavi del JSON, estratte in costanti per evitare la duplicazione dei letterali (SonarQube S1192)
+    private static final String FIELD_TIPO         = "tipo";
+    private static final String FIELD_NOME         = "nome";
+    private static final String FIELD_EMAIL        = "email";
+    private static final String FIELD_PASSWORD     = "password";
+    private static final String FIELD_NOME_AZIENDA = "nomeAzienda";
+    private static final String FIELD_DESCRIZIONE  = "descrizione";
+    private static final String TIPO_ORGANIZZATORE = "ORGANIZZATORE";
+    private static final String TIPO_CLIENTE       = "CLIENTE";
+
     @Override
     public void save(Utente utente) {
         // Legge il JSON grezzo come lista di JsonObject
@@ -44,7 +54,7 @@ public class UtenteDAOFileSystem implements UtenteDAO {
     @Override
     public Utente findByEmail(String email) {
         for (JsonObject obj : findAllRaw()) {
-            if (email.equalsIgnoreCase(obj.get("email").getAsString())) {
+            if (email.equalsIgnoreCase(obj.get(FIELD_EMAIL).getAsString())) {
                 return jsonToUtente(obj);
             }
         }
@@ -54,8 +64,8 @@ public class UtenteDAOFileSystem implements UtenteDAO {
     @Override
     public Utente findByEmailAndPassword(String email, String password) {
         for (JsonObject obj : findAllRaw()) {
-            if (email.equalsIgnoreCase(obj.get("email").getAsString())
-                    && password.equals(obj.get("password").getAsString())) {
+            if (email.equalsIgnoreCase(obj.get(FIELD_EMAIL).getAsString())
+                    && password.equals(obj.get(FIELD_PASSWORD).getAsString())) {
                 return jsonToUtente(obj);
             }
         }
@@ -83,20 +93,20 @@ public class UtenteDAOFileSystem implements UtenteDAO {
 
     /** Converte un JsonObject nel tipo concreto corretto usando il campo "tipo". */
     private Utente jsonToUtente(JsonObject obj) {
-        String tipo = obj.get("tipo").getAsString();
-        if ("ORGANIZZATORE".equals(tipo)) {
+        String tipo = obj.get(FIELD_TIPO).getAsString();
+        if (TIPO_ORGANIZZATORE.equals(tipo)) {
             return new Organizzatore(
-                    obj.get("nome").getAsString(),
-                    obj.get("email").getAsString(),
-                    obj.get("password").getAsString(),
-                    obj.has("nomeAzienda") ? obj.get("nomeAzienda").getAsString() : "",
-                    obj.has("descrizione") ? obj.get("descrizione").getAsString() : ""
+                    obj.get(FIELD_NOME).getAsString(),
+                    obj.get(FIELD_EMAIL).getAsString(),
+                    obj.get(FIELD_PASSWORD).getAsString(),
+                    obj.has(FIELD_NOME_AZIENDA) ? obj.get(FIELD_NOME_AZIENDA).getAsString() : "",
+                    obj.has(FIELD_DESCRIZIONE) ? obj.get(FIELD_DESCRIZIONE).getAsString() : ""
             );
         }
         return new Cliente(
-                obj.get("nome").getAsString(),
-                obj.get("email").getAsString(),
-                obj.get("password").getAsString()
+                obj.get(FIELD_NOME).getAsString(),
+                obj.get(FIELD_EMAIL).getAsString(),
+                obj.get(FIELD_PASSWORD).getAsString()
         );
     }
 
@@ -104,17 +114,17 @@ public class UtenteDAOFileSystem implements UtenteDAO {
     private JsonObject utenteToJson(Utente utente) {
         JsonObject obj = new JsonObject();
         if (utente instanceof Organizzatore org) {
-            obj.addProperty("tipo", "ORGANIZZATORE");
-            obj.addProperty("nome", org.getNome());
-            obj.addProperty("email", org.getEmail());
-            obj.addProperty("password", org.getPassword());
-            obj.addProperty("nomeAzienda", org.getNomeAzienda());
-            obj.addProperty("descrizione", org.getDescrizione());
+            obj.addProperty(FIELD_TIPO, TIPO_ORGANIZZATORE);
+            obj.addProperty(FIELD_NOME, org.getNome());
+            obj.addProperty(FIELD_EMAIL, org.getEmail());
+            obj.addProperty(FIELD_PASSWORD, org.getPassword());
+            obj.addProperty(FIELD_NOME_AZIENDA, org.getNomeAzienda());
+            obj.addProperty(FIELD_DESCRIZIONE, org.getDescrizione());
         } else {
-            obj.addProperty("tipo", "CLIENTE");
-            obj.addProperty("nome", utente.getNome());
-            obj.addProperty("email", utente.getEmail());
-            obj.addProperty("password", utente.getPassword());
+            obj.addProperty(FIELD_TIPO, TIPO_CLIENTE);
+            obj.addProperty(FIELD_NOME, utente.getNome());
+            obj.addProperty(FIELD_EMAIL, utente.getEmail());
+            obj.addProperty(FIELD_PASSWORD, utente.getPassword());
         }
         return obj;
     }
