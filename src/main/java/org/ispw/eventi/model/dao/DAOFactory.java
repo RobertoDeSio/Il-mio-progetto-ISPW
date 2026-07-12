@@ -8,7 +8,7 @@ public abstract class DAOFactory {
 
     public enum Tipo { MEMORY, FILESYSTEM, DBMS }
 
-    private static final Tipo TIPO_ATTIVO = Tipo.DBMS;
+    private static final Tipo TIPO_ATTIVO = Tipo.MEMORY;
     private static DAOFactory instance;
 
     public static DAOFactory getInstance() {

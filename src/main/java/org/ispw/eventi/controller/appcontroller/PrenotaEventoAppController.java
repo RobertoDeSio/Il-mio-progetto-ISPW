@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.logging.Logger;
+import java.time.ZoneId;
 
 /**
  * Controller Applicativo per il caso d'uso "Prenota Evento".
@@ -320,11 +321,11 @@ public class PrenotaEventoAppController {
 
         // 1. Sposta dataApprovazione 25h nel passato
         prenotazione.setDataApprovazione(
-                java.time.LocalDateTime.now().minusHours(25)
+                java.time.LocalDateTime.now(ZoneId.of("Europe/Rome")).minusHours(25)
         );
 
         // 2. Verifica scadenza con il tempo reale — ora sarà true
-        if (prenotazione.isScaduta(java.time.LocalDateTime.now())) {
+        if (prenotazione.isScaduta(java.time.LocalDateTime.now(ZoneId.of("Europe/Rome")))) {
             // 3. Transizione via State
             prenotazione.scadi();
             prenotazioneDAO.update(prenotazione);

@@ -2,6 +2,7 @@ package org.ispw.eventi.model.entity;
 
 import org.ispw.eventi.model.state.*;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 
 /**
  * Entity Prenotazione con pattern State integrato.
@@ -52,7 +53,7 @@ public class Prenotazione {
     public void approva() {
         StatoPrenotazione nuovoStato = getStatoCorrente().approva();
         this.stato            = fromState(nuovoStato);
-        this.dataApprovazione = LocalDateTime.now();   // ← timestamp registrato qui
+        this.dataApprovazione = LocalDateTime.now(ZoneId.of("Europe/Rome"));   // ← timestamp registrato qui
     }
 
     public void rifiuta() {
@@ -74,7 +75,7 @@ public class Prenotazione {
      *                               o se la prenotazione non è APPROVATA
      */
     public void scadi() {
-        if (!isScaduta(LocalDateTime.now())) {
+        if (!isScaduta(LocalDateTime.now(ZoneId.of("Europe/Rome")))) {
             throw new IllegalStateException(
                     "Non è possibile far scadere una prenotazione prima delle 24h " +
                             "dall'approvazione.");
