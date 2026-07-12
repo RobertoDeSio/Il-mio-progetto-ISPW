@@ -8,12 +8,27 @@ public abstract class DAOFactory {
 
     public enum Tipo { MEMORY, FILESYSTEM, DBMS }
 
-    private static final Tipo TIPO_ATTIVO = Tipo.MEMORY;
+    private static Tipo tipoAttivo = Tipo.MEMORY;
     private static DAOFactory instance;
+
+    /**
+     * Imposta il tipo di persistenza da usare. Va chiamato PRIMA della prima
+     * invocazione di {@link #getInstance()} (tipicamente all'avvio dell'app,
+     * dopo la scelta dell'utente). Se chiamato dopo che l'istanza è già
+     * stata creata, ricrea l'istanza con il nuovo tipo.
+     */
+    public static void setTipo(Tipo tipo) {
+        tipoAttivo = tipo;
+        instance = null; // forza la ricreazione con il nuovo tipo
+    }
+
+    public static Tipo getTipo() {
+        return tipoAttivo;
+    }
 
     public static DAOFactory getInstance() {
         if (instance == null) {
-            instance = switch (TIPO_ATTIVO) {
+            instance = switch (tipoAttivo) {
                 case MEMORY     -> new MemoryDAOFactory();
                 case FILESYSTEM -> new FileSystemDAOFactory();
                 case DBMS       -> new DbmsDAOFactory();
